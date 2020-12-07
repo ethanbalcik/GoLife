@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainController">
+   <children>
+      <HBox prefHeight="90.0">
+         <children>
+            <ImageView fx:id="logoDisplay" fitHeight="75.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </HBox.margin>
+            </ImageView>
+            <GridPane hgap="175.0" HBox.hgrow="ALWAYS">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button fx:id="calendarButton" mnemonicParsing="false" onAction="#toggleCalendar" text="Calendar" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </Button>
+                  <Button fx:id="goalsButton" mnemonicParsing="false" onAction="#toggleGoals" text="Goals" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" />
+                <Button fx:id="healthButton" mnemonicParsing="false" onAction="#toggleHealth" text="Health" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" />
+               </children>
+               <padding>
+                  <Insets left="200.0" right="200.0" />
+               </padding>
+            </GridPane>
+         </children>
+      </HBox>
+      <HBox prefHeight="630.0" prefWidth="1280.0" VBox.vgrow="ALWAYS">
+         <children>
+            <VBox>
+               <children>
+                  <Label text="Goals" VBox.vgrow="ALWAYS" />
+                  <ListView fx:id="goalDisplay" prefHeight="225.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <Pane prefHeight="30.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <Label text="Objectives" VBox.vgrow="ALWAYS" />
+                  <ListView fx:id="objectiveDisplay" prefHeight="225.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <Pane prefHeight="30.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logout" prefWidth="160.0" text="Logout" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="20.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+            <Pane fx:id="nestedDisplay" prefHeight="630.0" prefWidth="1080.0" style="-fx-background-color: #1d1d1d;" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+   </children>
+</VBox>
