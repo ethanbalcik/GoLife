@@ -164,7 +164,34 @@ public class LoginController implements Initializable
         //TODO: eventually call a login function here
         if(user != null)
         {
-            System.out.println(user.toString());
+            login(user, event);
+        }
+    }
+    
+    private void login(Usermodel user, ActionEvent event)
+    {
+        try
+        {
+            //Load main view
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/MainView.fxml"));
+            Parent mainView = loader.load();
+
+            //Instantiate scene, give it the parent we instantiated, also get current scene from event source
+            Scene mainScene = new Scene(mainView);
+            Scene currentScene = ((Node)event.getSource()).getScene();
+            
+            //Get the controller, init selected user data
+            MainController controller = loader.getController();
+            controller.setActiveUser(user);
+            
+            //Instantiate new stage, give it the scene we instantiated, set visible
+            Stage stage = (Stage) currentScene.getWindow();
+            stage.setScene(mainScene);
+            stage.show();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
         }
     }
     
