@@ -10,11 +10,16 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
 /**
@@ -40,7 +45,9 @@ public class MainController implements Initializable
     @FXML
     private Button logoutButton;
     @FXML
-    private Pane nestedDisplay;
+    private Parent goalView;
+    @FXML
+    private Parent dailyHealthView;
     private Usermodel activeUser;
 
     public ImageView getLogoDisplay()
@@ -113,14 +120,24 @@ public class MainController implements Initializable
         this.logoutButton = logoutButton;
     }
 
-    public Pane getNestedDisplay()
+    public Parent getGoalView()
     {
-        return nestedDisplay;
+        return goalView;
     }
 
-    public void setNestedDisplay(Pane nestedDisplay)
+    public void setGoalView(Parent goalView)
     {
-        this.nestedDisplay = nestedDisplay;
+        this.goalView = goalView;
+    }
+
+    public Parent getDailyHealthView()
+    {
+        return dailyHealthView;
+    }
+
+    public void setDailyHealthView(Parent dailyHealthView)
+    {
+        this.dailyHealthView = dailyHealthView;
     }
 
     public Usermodel getActiveUser()
@@ -151,13 +168,15 @@ public class MainController implements Initializable
     @FXML
     private void toggleGoals(ActionEvent event)
     {
-        //TODO: set nestedDisplay to GoalView
+        getDailyHealthView().setVisible(false);
+        getGoalView().setVisible(true);
     }
 
     @FXML
     private void toggleHealth(ActionEvent event)
     {
-        //TODO: set nestedDisplay to HealthView
+        getGoalView().setVisible(false);
+        getDailyHealthView().setVisible(true);
     }
 
     @FXML
