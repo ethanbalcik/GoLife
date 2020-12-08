@@ -65,9 +65,9 @@
             </VBox>
             <StackPane prefHeight="150.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                 <children>
-                    <fx:include fx:id="goalView" source="GoalView.fxml"/>
+                    <fx:include fx:id="calendarView" source="CalendarView.fxml"/>
+                    <fx:include fx:id="goalView" source="GoalView.fxml" visible="false"/>
                     <fx:include fx:id="dailyHealthView" source="DailyHealthView.fxml" visible="false"/>
-                    <fx:include fx:id="calendarView" source="CalendarView.fxml" visible="false"/>
                 </children>
             </StackPane>
          </children>

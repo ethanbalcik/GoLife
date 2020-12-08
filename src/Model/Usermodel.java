@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -27,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries(
 {
-    @NamedQuery(name = "Usermodel.findAll", query = "SELECT u FROM Usermodel u ORDER BY u.userid DESC")
+    @NamedQuery(name = "Usermodel.findAll", query = "SELECT u FROM Usermodel u")
     , @NamedQuery(name = "Usermodel.findByUserid", query = "SELECT u FROM Usermodel u WHERE u.userid = :userid")
     , @NamedQuery(name = "Usermodel.findByFirstname", query = "SELECT u FROM Usermodel u WHERE u.firstname = :firstname")
     , @NamedQuery(name = "Usermodel.findByLastname", query = "SELECT u FROM Usermodel u WHERE u.lastname = :lastname")
@@ -36,7 +38,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Usermodel.findByUsername", query = "SELECT u FROM Usermodel u WHERE u.username = :username")
     , @NamedQuery(name = "Usermodel.findByPassword", query = "SELECT u FROM Usermodel u WHERE u.password = :password")
     , @NamedQuery(name = "Usermodel.findByUsernamePassword", query = "SELECT u FROM Usermodel u WHERE u.username = :username AND u.password = :password")
-    , @NamedQuery(name = "Usermodel.findByAllMinusUserid", query = "SELECT u FROM Usermodel u WHERE u.firstname = :firstname AND u.lastname = :lastname AND u.dateofbirth = :dateofbirth AND u.email = :email AND u.username = :username AND u.password = :password")
 })
 public class Usermodel implements Serializable
 {
@@ -59,6 +60,9 @@ public class Usermodel implements Serializable
     private String username;
     @Column(name = "PASSWORD")
     private String password;
+    @JoinColumn(name = "CALENDARID", referencedColumnName = "CALENDARID")
+    @ManyToOne
+    private Calendarmodel calendarid;
 
     public Usermodel()
     {
@@ -139,6 +143,16 @@ public class Usermodel implements Serializable
         this.password = password;
     }
 
+    public Calendarmodel getCalendarid()
+    {
+        return calendarid;
+    }
+
+    public void setCalendarid(Calendarmodel calendarid)
+    {
+        this.calendarid = calendarid;
+    }
+
     @Override
     public int hashCode()
     {
@@ -166,7 +180,7 @@ public class Usermodel implements Serializable
     @Override
     public String toString()
     {
-        return "Model.Usermodel[ userid=" + userid + ", username=" + username + ", password=" + password + ", firstname=" + firstname + ", lastname=" + lastname + ", email=" + email + ", dateofbirth=" + dateofbirth.toString() + " ]";
+        return "Model.Usermodel[ userid=" + userid + " ]";
     }
     
 }

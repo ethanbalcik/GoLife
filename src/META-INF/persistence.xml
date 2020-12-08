@@ -3,6 +3,11 @@
   <persistence-unit name="GoLifePU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>Model.Usermodel</class>
+    <class>Model.Dailyhealthmodel</class>
+    <class>Model.Objectivemodel</class>
+    <class>Model.Eventmodel</class>
+    <class>Model.Calendarmodel</class>
+    <class>Model.Goalmodel</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/GoLife"/>
       <property name="javax.persistence.jdbc.user" value="APP"/>
