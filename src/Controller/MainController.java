@@ -48,6 +48,8 @@ public class MainController implements Initializable
     private Parent goalView;
     @FXML
     private Parent dailyHealthView;
+    @FXML
+    private Parent calendarView;
     private Usermodel activeUser;
 
     public ImageView getLogoDisplay()
@@ -140,6 +142,16 @@ public class MainController implements Initializable
         this.dailyHealthView = dailyHealthView;
     }
 
+    public Parent getCalendarView() {
+        return calendarView;
+    }
+
+    public void setCalendarView(Parent calendarView) {
+        this.calendarView = calendarView;
+    }
+    
+    
+
     public Usermodel getActiveUser()
     {
         return activeUser;
@@ -162,12 +174,15 @@ public class MainController implements Initializable
     @FXML
     private void toggleCalendar(ActionEvent event)
     {
-        //TODO: set nestedDisplay to CalendarView
+        getDailyHealthView().setVisible(false);
+        getGoalView().setVisible(false);
+        getCalendarView().setVisible(true);
     }
 
     @FXML
     private void toggleGoals(ActionEvent event)
     {
+        getCalendarView().setVisible(false);
         getDailyHealthView().setVisible(false);
         getGoalView().setVisible(true);
     }
@@ -175,6 +190,7 @@ public class MainController implements Initializable
     @FXML
     private void toggleHealth(ActionEvent event)
     {
+        getCalendarView().setVisible(false);
         getGoalView().setVisible(false);
         getDailyHealthView().setVisible(true);
     }
