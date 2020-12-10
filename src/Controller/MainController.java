@@ -5,9 +5,13 @@
  */
 package Controller;
 
+import Model.Goalmodel;
 import Model.Usermodel;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,11 +20,16 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import javafx.util.Callback;
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 /**
  * FXML Controller class
@@ -29,7 +38,6 @@ import javafx.scene.layout.Pane;
  */
 public class MainController implements Initializable
 {
-
     @FXML
     private ImageView logoDisplay;
     @FXML
@@ -39,7 +47,7 @@ public class MainController implements Initializable
     @FXML
     private Button healthButton;
     @FXML
-    private ListView<?> goalDisplay;
+    private ListView<String> goalDisplay;
     @FXML
     private ListView<?> objectiveDisplay;
     @FXML
@@ -50,7 +58,19 @@ public class MainController implements Initializable
     private Parent dailyHealthView;
     @FXML
     private Parent calendarView;
+    @FXML
+    private GoalController goalViewController;
+    @FXML
+    private DailyHealthController dailyHealthViewController;
+    @FXML
+    private CalendarController calendarViewController;
+    private EntityManager manager;
     private Usermodel activeUser;
+    private List<Goalmodel> ongoingGoals;
+    private List<Goalmodel> pastGoals;
+    private ObservableList<Goalmodel> ongoingGoalsObservable;
+    private ObservableList<String> ongoingGoalNameObservable;
+    private ObservableList<Goalmodel> pastGoalsObservable;
 
     public ImageView getLogoDisplay()
     {
@@ -92,12 +112,12 @@ public class MainController implements Initializable
         this.healthButton = healthButton;
     }
 
-    public ListView<?> getGoalDisplay()
+    public ListView<String> getGoalDisplay()
     {
         return goalDisplay;
     }
 
-    public void setGoalDisplay(ListView<?> goalDisplay)
+    public void setGoalDisplay(ListView<String> goalDisplay)
     {
         this.goalDisplay = goalDisplay;
     }
@@ -142,24 +162,114 @@ public class MainController implements Initializable
         this.dailyHealthView = dailyHealthView;
     }
 
-    public Parent getCalendarView() {
+    public Parent getCalendarView() 
+    {
         return calendarView;
     }
 
-    public void setCalendarView(Parent calendarView) {
+    public void setCalendarView(Parent calendarView) 
+    {
         this.calendarView = calendarView;
     }
-    
-    
+
+    public GoalController getGoalViewController()
+    {
+        return goalViewController;
+    }
+
+    public void setGoalViewController(GoalController goalController)
+    {
+        this.goalViewController = goalController;
+    }
+
+    public DailyHealthController getDailyHealthViewController()
+    {
+        return dailyHealthViewController;
+    }
+
+    public void setDailyHealthViewController(DailyHealthController dailyHealthViewController)
+    {
+        this.dailyHealthViewController = dailyHealthViewController;
+    }
+
+    public CalendarController getCalendarViewController()
+    {
+        return calendarViewController;
+    }
+
+    public void setCalendarViewController(CalendarController calendarViewController)
+    {
+        this.calendarViewController = calendarViewController;
+    }
 
     public Usermodel getActiveUser()
     {
-        return activeUser;
+        return this.activeUser;
     }
 
     public void setActiveUser(Usermodel activeUser)
     {
         this.activeUser = activeUser;
+    }
+
+    public List<Goalmodel> getOngoingGoals()
+    {
+        return ongoingGoals;
+    }
+
+    public void setOngoingGoals(List<Goalmodel> ongoingGoals)
+    {
+        this.ongoingGoals = ongoingGoals;
+    }
+
+    public List<Goalmodel> getPastGoals()
+    {
+        return pastGoals;
+    }
+
+    public void setPastGoals(List<Goalmodel> pastGoals)
+    {
+        this.pastGoals = pastGoals;
+    }
+
+    public ObservableList<String> getOngoingGoalNameObservable()
+    {
+        return ongoingGoalNameObservable;
+    }
+
+    public void setOngoingGoalNameObservable(ObservableList<String> ongoingGoalNameObservable)
+    {
+        this.ongoingGoalNameObservable = ongoingGoalNameObservable;
+    }
+
+    public ObservableList<Goalmodel> getOngoingGoalsObservable()
+    {
+        return ongoingGoalsObservable;
+    }
+
+    public void setOngoingGoalsObservable(ObservableList<Goalmodel> ongoingGoalsObservable)
+    {
+        this.ongoingGoalsObservable = ongoingGoalsObservable;
+    }
+
+    public ObservableList<Goalmodel> getPastGoalsObservable()
+    {
+        return pastGoalsObservable;
+    }
+
+    public void setPastGoalsObservable(ObservableList<Goalmodel> pastGoalsObservable)
+    {
+        this.pastGoalsObservable = pastGoalsObservable;
+    }
+
+    public EntityManager getManager()
+    {
+        return manager;
+    }
+
+    public void setManager(EntityManager manager)
+    {
+        this.manager = manager;
     }
     
     /**
@@ -168,8 +278,9 @@ public class MainController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-        getLogoDisplay().setImage(new Image("/Assets/20_IST311_GoLife_Logo_v1.png"));
-    }    
+        //Init EntityManager
+        setManager((EntityManager) Persistence.createEntityManagerFactory("GoLifePU").createEntityManager());
+    }
 
     @FXML
     private void toggleCalendar(ActionEvent event)
@@ -198,6 +309,67 @@ public class MainController implements Initializable
     @FXML
     private void logout(ActionEvent event)
     {
-        //TODO: navigate to login view
+        try
+        {
+            //Load FXML detail view
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/LoginView.fxml"));
+            Parent loginView = loader.load();
+
+            //Instantiate scene, give it the parent we instantiated, also get current scene from event source
+            Scene loginScene = new Scene(loginView);
+            Scene currentScene = ((Node)event.getSource()).getScene();
+
+            //Instantiate new stage, give it the scene we instantiated, set visible
+            Stage stage = (Stage) currentScene.getWindow();
+            stage.setScene(loginScene);
+            stage.show();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+    
+    public void updateGoalViews()
+    {
+        //Query for all ongoing goals
+        Query query = getManager().createNamedQuery("Goalmodel.findByCalendarIdAndOngoing");
+        query.setParameter("ongoing", true);
+        query.setParameter("calendarid", getActiveUser().getCalendarid());
+        setOngoingGoals(query.getResultList());
+        
+        //Reset ongoing goals observable lists
+        setOngoingGoalNameObservable(FXCollections.observableArrayList());
+        setOngoingGoalsObservable(FXCollections.observableArrayList());
+        
+        //For all goals in result list, add goals to observable list
+        for(Goalmodel g : getOngoingGoals())
+        {
+            getOngoingGoalNameObservable().add(g.getName());
+            getOngoingGoalsObservable().add(g);
+        }
+        
+        //Query for all past goals
+        Query query2 = getManager().createNamedQuery("Goalmodel.findByCalendarIdAndOngoing");
+        query.setParameter("ongoing", false);
+        query.setParameter("calendarid", getActiveUser().getCalendarid());
+        setPastGoals(query.getResultList());
+        
+        //Reset past goals observable
+        setPastGoalsObservable(FXCollections.observableArrayList());
+        
+        //For all goals in result list, add goals to observable list
+        for(Goalmodel g : getPastGoals())
+        {
+            getPastGoalsObservable().add(g);
+        }
+        
+        //Update display
+        getGoalDisplay().setItems(getOngoingGoalNameObservable());
+        getGoalViewController().getOngoingGoalTable().setItems(getOngoingGoalsObservable());
+        getGoalViewController().getPastGoalTable().setItems(getPastGoalsObservable());
+        getGoalDisplay().refresh();
+        getGoalViewController().getOngoingGoalTable().refresh();
+        getGoalViewController().getPastGoalTable().refresh();
     }
 }

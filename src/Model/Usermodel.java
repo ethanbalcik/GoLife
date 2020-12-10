@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries(
 {
-    @NamedQuery(name = "Usermodel.findAll", query = "SELECT u FROM Usermodel u")
+    @NamedQuery(name = "Usermodel.findAll", query = "SELECT u FROM Usermodel u ORDER BY u.userid DESC")
     , @NamedQuery(name = "Usermodel.findByUserid", query = "SELECT u FROM Usermodel u WHERE u.userid = :userid")
     , @NamedQuery(name = "Usermodel.findByFirstname", query = "SELECT u FROM Usermodel u WHERE u.firstname = :firstname")
     , @NamedQuery(name = "Usermodel.findByLastname", query = "SELECT u FROM Usermodel u WHERE u.lastname = :lastname")

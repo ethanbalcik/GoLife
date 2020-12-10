@@ -5,11 +5,15 @@
  */
 package Controller;
 
+import Model.Calendarmodel;
+import Model.Goalmodel;
 import Model.Usermodel;
 import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -218,10 +222,17 @@ public class RegisterController implements Initializable
         Date dateofbirth = Date.from(instant);
         
         //Create user given the input information
-        createUser(getFirstNameField().getText(), getLastNameField().getText(), dateofbirth, getEmailField().getText(), getUsernameField().getText(), getPasswordField().getText());
+        Usermodel user = createUser(getFirstNameField().getText(), getLastNameField().getText(), dateofbirth, getEmailField().getText(), getUsernameField().getText(), getPasswordField().getText());
+        
+        
+        //Check if user is null, if not, navigate to main view
+        if(!(user == null))
+        {
+            register(user, event);
+        }
     }
     
-    private void createUser(String firstname, String lastname, Date dateofbirth, String email, String username, String password)
+    private Usermodel createUser(String firstname, String lastname, Date dateofbirth, String email, String username, String password)
     {
         try
         {
@@ -247,22 +258,55 @@ public class RegisterController implements Initializable
             user.setEmail(email);
             user.setUsername(username);
             user.setPassword(password);
+            user.setCalendarid(generateCalendar(userId));
             
             //Check if user exists & successfully created
             if(!searchUser(username))
             {
                 //Begin transaction
                 getManager().getTransaction().begin();
-
+                
+                //Persist calendar
+                getManager().persist(user.getCalendarid());
+                
                 //Persist user and end transaction
                 getManager().persist(user);
                 getManager().getTransaction().commit();
+                return user;
+            }
+            else
+            {
+                return null;
             }
         }
         catch(Exception e)
         {
             e.printStackTrace();
+            return null;
         }
+    }
+    
+    private Calendarmodel generateCalendar(int calendarId)
+    {
+        //Instantiate calendar and set ID equal to calendarId argument
+        Calendarmodel calendar = new Calendarmodel();
+        calendar.setCalendarid(calendarId);
+        
+        //Generate current date
+        calendar.setCurrentdate(new Date());
+        
+        //Set displaydate equal to current date
+        calendar.setDisplaydate(calendar.getCurrentdate());
+        
+        //Set timescope
+        calendar.setTimescope(0);
+        
+        //Instantiate goal, event, and dailyhealth collections
+        calendar.setGoalmodelCollection(new ArrayList());
+        calendar.setEventmodelCollection(new ArrayList());
+        calendar.setDailyhealthmodelCollection(new ArrayList());
+        
+        return calendar;
     }
     
     private boolean searchUser(String username)
@@ -294,5 +338,38 @@ public class RegisterController implements Initializable
         
         //Return flag value
         return userFound;
+    }
+    
+    private void register(Usermodel user, ActionEvent event)
+    {
+        try
+        {
+            //Load main view
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/MainView.fxml"));
+            Parent mainView = loader.load();
+
+            //Instantiate scene, give it the parent we instantiated, also get current scene from event source
+            Scene mainScene = new Scene(mainView);
+            Scene currentScene = ((Node)event.getSource()).getScene();
+            
+            //Get the controller, init selected user data
+            MainController controller = loader.getController();
+            controller.setActiveUser(user);
+            
+            //Set active user and main controller in sub controllers
+            controller.getGoalViewController().setActiveUser(user);
+            controller.getGoalViewController().setMainController(controller);
+            controller.getCalendarViewController().setActiveUser(user);
+            controller.getDailyHealthViewController().setActiveUser(user);
+            
+            //Instantiate new stage, give it the scene we instantiated, set visible
+            Stage stage = (Stage) currentScene.getWindow();
+            stage.setScene(mainScene);
+            stage.show();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 }

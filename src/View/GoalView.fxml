@@ -14,19 +14,19 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.GoalController">
    <right>
-      <TableView prefHeight="585.0" prefWidth="360.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="pastGoalTable" prefHeight="585.0" prefWidth="360.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn prefWidth="225.0" text="Goal Name" />
-          <TableColumn prefWidth="131.0" text="Accomplished?" />
+          <TableColumn fx:id="pastGoalNameColumn" prefWidth="225.0" text="Goal Name" />
+          <TableColumn fx:id="pastGoalAccomplishedColumn" prefWidth="131.0" text="Accomplished?" />
         </columns>
       </TableView>
    </right>
    <left>
-      <TableView prefHeight="585.0" prefWidth="720.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="ongoingGoalTable" prefHeight="585.0" prefWidth="720.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn prefWidth="210.0" text="Goal Name" />
-          <TableColumn prefWidth="371.0" text="Description" />
-            <TableColumn prefWidth="137.0" text="Deadline" />
+          <TableColumn fx:id="ongoingGoalNameColumn" prefWidth="210.0" text="Goal Name" />
+          <TableColumn fx:id="ongoingGoalDescriptionColumn" prefWidth="371.0" text="Description" />
+          <TableColumn fx:id="ongoingGoalDeadlineColumn" prefWidth="137.0" text="Deadline" />
         </columns>
       </TableView>
    </left>
@@ -48,9 +48,9 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="createGoal" mnemonicParsing="false" text="Create Goal" GridPane.halignment="CENTER" />
-                  <Button fx:id="createObjective" mnemonicParsing="false" text="Create Objective" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-                  <Button fx:id="createEntry" mnemonicParsing="false" text="Create Entry" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                  <Button mnemonicParsing="false" onAction="#toCreateGoal" text="Create Goal" GridPane.halignment="CENTER" />
+                  <Button mnemonicParsing="false" onAction="#toCreateObjective" disable="true" text="Create Objective" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                  <Button mnemonicParsing="false" onAction="#toCreateEvent" disable="true" text="Create Entry" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
                </children>
             </GridPane>
          </children>

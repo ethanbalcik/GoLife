@@ -12,13 +12,17 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.Image?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainController">
    <children>
       <HBox prefHeight="90.0">
          <children>
             <ImageView fx:id="logoDisplay" fitHeight="75.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
-               <HBox.margin>
+                <image>
+                     <Image url="@/Assets/20_IST311_GoLife_Logo_v1.png"/>
+                </image>
+                <HBox.margin>
                   <Insets left="10.0" top="10.0" />
                </HBox.margin>
             </ImageView>
@@ -65,9 +69,9 @@
             </VBox>
             <StackPane prefHeight="150.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                 <children>
-                    <fx:include fx:id="calendarView" source="CalendarView.fxml"/>
-                    <fx:include fx:id="goalView" source="GoalView.fxml" visible="false"/>
-                    <fx:include fx:id="dailyHealthView" source="DailyHealthView.fxml" visible="false"/>
+                    <fx:include fx:id="calendarView" source="/View/CalendarView.fxml"/>
+                    <fx:include fx:id="goalView" source="/View/GoalView.fxml" visible="false"/>
+                    <fx:include fx:id="dailyHealthView" source="/View/DailyHealthView.fxml" visible="false"/>
                 </children>
             </StackPane>
          </children>
