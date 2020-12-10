@@ -32,15 +32,26 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries(
 {
-    @NamedQuery(name = "Goalmodel.findAll", query = "SELECT g FROM Goalmodel g")
+    @NamedQuery(name = "Goalmodel.findAll", query = "SELECT g FROM Goalmodel g ORDER BY g.goalid DESC")
     , @NamedQuery(name = "Goalmodel.findByGoalid", query = "SELECT g FROM Goalmodel g WHERE g.goalid = :goalid")
     , @NamedQuery(name = "Goalmodel.findByName", query = "SELECT g FROM Goalmodel g WHERE g.name = :name")
     , @NamedQuery(name = "Goalmodel.findByDescription", query = "SELECT g FROM Goalmodel g WHERE g.description = :description")
     , @NamedQuery(name = "Goalmodel.findByDeadline", query = "SELECT g FROM Goalmodel g WHERE g.deadline = :deadline")
-    , @NamedQuery(name = "Goalmodel.findByColor", query = "SELECT g FROM Goalmodel g WHERE g.color = :color")
+    , @NamedQuery(name = "Goalmodel.findByOngoing", query = "SELECT g FROM Goalmodel g WHERE g.ongoing = :ongoing")
+    , @NamedQuery(name = "Goalmodel.findByAccomplished", query = "SELECT g FROM Goalmodel g WHERE g.accomplished = :accomplished")
+    , @NamedQuery(name = "Goalmodel.findByCalendarIdAndOngoing", query = "SELECT g FROM Goalmodel g WHERE g.ongoing = :ongoing AND g.calendarid = :calendarid") 
 })
 public class Goalmodel implements Serializable
 {
+
+    @Column(name = "GREENCHANNEL")
+    private Double greenchannel;
+
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "REDCHANNEL")
+    private Double redchannel;
+    @Column(name = "BLUECHANNEL")
+    private Double bluechannel;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -56,8 +67,10 @@ public class Goalmodel implements Serializable
     @Temporal(TemporalType.DATE)
     private Date deadline;
     @Basic(optional = false)
-    @Column(name = "COLOR")
-    private long color;
+    @Column(name = "ONGOING")
+    private Boolean ongoing;
+    @Column(name = "ACCOMPLISHED")
+    private Boolean accomplished;
     @OneToMany(mappedBy = "goalid")
     private Collection<Objectivemodel> objectivemodelCollection;
     @OneToMany(mappedBy = "goalid")
@@ -75,11 +88,10 @@ public class Goalmodel implements Serializable
         this.goalid = goalid;
     }
 
-    public Goalmodel(Integer goalid, Date deadline, long color)
+    public Goalmodel(Integer goalid, Date deadline)
     {
         this.goalid = goalid;
         this.deadline = deadline;
-        this.color = color;
     }
 
     public Integer getGoalid()
@@ -122,14 +134,24 @@ public class Goalmodel implements Serializable
         this.deadline = deadline;
     }
 
-    public long getColor()
+    public Boolean getOngoing()
     {
-        return color;
+        return ongoing;
     }
 
-    public void setColor(long color)
+    public void setOngoing(Boolean ongoing)
     {
-        this.color = color;
+        this.ongoing = ongoing;
+    }
+
+    public Boolean getAccomplished()
+    {
+        return accomplished;
+    }
+
+    public void setAccomplished(Boolean accomplished)
+    {
+        this.accomplished = accomplished;
     }
 
     @XmlTransient
@@ -192,6 +214,36 @@ public class Goalmodel implements Serializable
     public String toString()
     {
         return "Model.Goalmodel[ goalid=" + goalid + " ]";
+    }
+
+    public Double getRedchannel()
+    {
+        return redchannel;
+    }
+
+    public void setRedchannel(Double redchannel)
+    {
+        this.redchannel = redchannel;
+    }
+
+    public Double getBluechannel()
+    {
+        return bluechannel;
+    }
+
+    public void setBluechannel(Double bluechannel)
+    {
+        this.bluechannel = bluechannel;
+    }
+
+    public Double getGreenchannel()
+    {
+        return greenchannel;
+    }
+
+    public void setGreenchannel(Double greenchannel)
+    {
+        this.greenchannel = greenchannel;
     }
     
 }

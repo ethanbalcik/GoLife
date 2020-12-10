@@ -190,7 +190,7 @@ public class Calendarmodel implements Serializable
     @Override
     public String toString()
     {
-        return "Model.Calendarmodel[ calendarid=" + calendarid + " ]";
+        return "Model.Calendarmodel[ calendarid=" + calendarid + ", currentdate=" + currentdate + ", displaydate=" + displaydate + ", timescope=" + timescope +" ]";
     }
     
 }

@@ -42,6 +42,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Eventmodel implements Serializable
 {
 
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "REDCHANNEL")
+    private Double redchannel;
+    @Column(name = "GREENCHANNEL")
+    private Boolean greenchannel;
+    @Column(name = "BLUECHANNEL")
+    private Double bluechannel;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -219,6 +227,36 @@ public class Eventmodel implements Serializable
     public String toString()
     {
         return "Model.Eventmodel[ eventid=" + eventid + " ]";
+    }
+
+    public Double getRedchannel()
+    {
+        return redchannel;
+    }
+
+    public void setRedchannel(Double redchannel)
+    {
+        this.redchannel = redchannel;
+    }
+
+    public Boolean getGreenchannel()
+    {
+        return greenchannel;
+    }
+
+    public void setGreenchannel(Boolean greenchannel)
+    {
+        this.greenchannel = greenchannel;
+    }
+
+    public Double getBluechannel()
+    {
+        return bluechannel;
+    }
+
+    public void setBluechannel(Double bluechannel)
+    {
+        this.bluechannel = bluechannel;
     }
     
 }

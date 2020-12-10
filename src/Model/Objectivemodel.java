@@ -39,9 +39,19 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Objectivemodel.findByDescription", query = "SELECT o FROM Objectivemodel o WHERE o.description = :description")
     , @NamedQuery(name = "Objectivemodel.findByDeadline", query = "SELECT o FROM Objectivemodel o WHERE o.deadline = :deadline")
     , @NamedQuery(name = "Objectivemodel.findByColor", query = "SELECT o FROM Objectivemodel o WHERE o.color = :color")
+    , @NamedQuery(name = "Objectivemodel.findByOngoing", query = "SELECT o FROM Objectivemodel o WHERE o.ongoing = :ongoing")
+    , @NamedQuery(name = "Objectivemodel.findByAccomplished", query = "SELECT o FROM Objectivemodel o WHERE o.accomplished = :accomplished")
 })
 public class Objectivemodel implements Serializable
 {
+
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "REDCHANNEL")
+    private Double redchannel;
+    @Column(name = "GREENCHANNEL")
+    private Double greenchannel;
+    @Column(name = "BLUECHANNEL")
+    private Double bluechannel;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -58,6 +68,10 @@ public class Objectivemodel implements Serializable
     private Date deadline;
     @Column(name = "COLOR")
     private BigInteger color;
+    @Column(name = "ONGOING")
+    private Boolean ongoing;
+    @Column(name = "ACCOMPLISHED")
+    private Boolean accomplished;
     @JoinColumn(name = "GOALID", referencedColumnName = "GOALID")
     @ManyToOne
     private Goalmodel goalid;
@@ -129,6 +143,26 @@ public class Objectivemodel implements Serializable
         this.color = color;
     }
 
+    public Boolean getOngoing()
+    {
+        return ongoing;
+    }
+
+    public void setOngoing(Boolean ongoing)
+    {
+        this.ongoing = ongoing;
+    }
+
+    public Boolean getAccomplished()
+    {
+        return accomplished;
+    }
+
+    public void setAccomplished(Boolean accomplished)
+    {
+        this.accomplished = accomplished;
+    }
+
     public Goalmodel getGoalid()
     {
         return goalid;
@@ -178,6 +212,36 @@ public class Objectivemodel implements Serializable
     public String toString()
     {
         return "Model.Objectivemodel[ objectiveid=" + objectiveid + " ]";
+    }
+
+    public Double getRedchannel()
+    {
+        return redchannel;
+    }
+
+    public void setRedchannel(Double redchannel)
+    {
+        this.redchannel = redchannel;
+    }
+
+    public Double getGreenchannel()
+    {
+        return greenchannel;
+    }
+
+    public void setGreenchannel(Double greenchannel)
+    {
+        this.greenchannel = greenchannel;
+    }
+
+    public Double getBluechannel()
+    {
+        return bluechannel;
+    }
+
+    public void setBluechannel(Double bluechannel)
+    {
+        this.bluechannel = bluechannel;
     }
     
 }

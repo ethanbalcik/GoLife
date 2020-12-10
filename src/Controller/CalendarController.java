@@ -8,16 +8,14 @@ package Controller;
 import Model.Usermodel;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 
 /**
  * FXML Controller class
  *
  * @author ebalc
  */
-public class DailyHealthController implements Initializable
+public class CalendarController implements Initializable
 {
     private Usermodel activeUser;
 
@@ -38,5 +36,6 @@ public class DailyHealthController implements Initializable
     public void initialize(URL url, ResourceBundle rb)
     {
         // TODO
-    }
+    }    
+    
 }

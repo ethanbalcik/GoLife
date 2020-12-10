@@ -184,6 +184,15 @@ public class LoginController implements Initializable
             MainController controller = loader.getController();
             controller.setActiveUser(user);
             
+            //Set active user and main controller in sub controllers
+            controller.getGoalViewController().setActiveUser(user);
+            controller.getGoalViewController().setMainController(controller);
+            controller.getCalendarViewController().setActiveUser(user);
+            controller.getDailyHealthViewController().setActiveUser(user);
+            
+            //Update views
+            controller.updateGoalViews();
+            
             //Instantiate new stage, give it the scene we instantiated, set visible
             Stage stage = (Stage) currentScene.getWindow();
             stage.setScene(mainScene);
