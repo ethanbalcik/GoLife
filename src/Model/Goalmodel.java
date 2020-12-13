@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Goalmodel.findByAccomplished", query = "SELECT g FROM Goalmodel g WHERE g.accomplished = :accomplished")
     , @NamedQuery(name = "Goalmodel.findByCalendarIdAndOngoing", query = "SELECT g FROM Goalmodel g WHERE g.ongoing = :ongoing AND g.calendarid = :calendarid") 
 })
-public class Goalmodel implements Serializable
+public class Goalmodel implements Serializable, GoalObjectiveDisplayable
 {
 
     @Column(name = "GREENCHANNEL")
@@ -244,6 +244,12 @@ public class Goalmodel implements Serializable
     public void setGreenchannel(Double greenchannel)
     {
         this.greenchannel = greenchannel;
+    }
+
+    @Override
+    public int getId()
+    {
+        return this.goalid;
     }
     
 }

@@ -359,6 +359,7 @@ public class RegisterController implements Initializable
             //Set active user and main controller in sub controllers
             controller.getGoalViewController().setActiveUser(user);
             controller.getGoalViewController().setMainController(controller);
+            controller.getGoalViewController().bindOngoingGoalTableWithButtons();
             controller.getCalendarViewController().setActiveUser(user);
             controller.getDailyHealthViewController().setActiveUser(user);
             
