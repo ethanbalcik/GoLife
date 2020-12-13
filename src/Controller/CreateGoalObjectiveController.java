@@ -7,6 +7,7 @@ package Controller;
 
 import Model.Calendarmodel;
 import Model.Goalmodel;
+import Model.Objectivemodel;
 import Model.Usermodel;
 import javafx.scene.paint.Color;
 import java.net.URL;
@@ -61,6 +62,7 @@ public class CreateGoalObjectiveController implements Initializable
     private MainController mainController;
     private Usermodel activeUser;
     private boolean isGoal;
+    private int selectedId;
 
     public ImageView getLogoDisplay()
     {
@@ -182,6 +184,16 @@ public class CreateGoalObjectiveController implements Initializable
         this.isGoal = isGoal;
     }
 
+    public int getSelectedId()
+    {
+        return selectedId;
+    }
+
+    public void setSelectedId(int selectedId)
+    {
+        this.selectedId = selectedId;
+    }
+
     /**
      * Initializes the controller class.
      */
@@ -232,6 +244,20 @@ public class CreateGoalObjectiveController implements Initializable
         else
         {
             //Create objective givent the input information
+            Objectivemodel objective = createObjective(getGoalObjectiveNameField().getText(), deadline, getColorField().getValue(), getDescriptionField().getText());
+            
+            //Check if transaction complete by querying for goal
+            Query query = getManager().createNamedQuery("Objectivemodel.findByObjectiveid");
+            query.setParameter("objectiveid", objective.getObjectiveid());
+            int resultSize = query.getResultList().size();
+            if(resultSize == 1)
+            {
+                transactionComplete = true;
+            }
+            else
+            {
+                getFeedbackLabel().setText("Goal was not saved");
+            }
         }
         
         if(transactionComplete)
@@ -295,8 +321,53 @@ public class CreateGoalObjectiveController implements Initializable
         }
     }
     
-    private void createObjective()
+    private Objectivemodel createObjective(String name, Date deadline, Color color, String description)
     {
-        //TODO: Implement
+        try
+        {
+            //Query for selected goal
+            Query query = getManager().createNamedQuery("Goalmodel.findByGoalid");
+            query.setParameter("goalid", getSelectedId());
+            Goalmodel selectedGoal = (Goalmodel)query.getSingleResult();
+            
+            //Query for most recent objective id, check for values, and get incremented value
+            Query query2 = getManager().createNamedQuery("Objectivemodel.findAll");
+            int objectiveId = 1;
+            if(query2.getResultList().size() != 0)
+            {
+                objectiveId = ((Objectivemodel)query2.getResultList().get(0)).getObjectiveid() + 1;
+            }
+            
+            //Instantiate goal and set attributes using input params
+            Objectivemodel objective = new Objectivemodel();
+            objective.setObjectiveid(objectiveId);
+            objective.setName(name);
+            objective.setDeadline(deadline);
+            objective.setRedchannel(color.getRed());
+            objective.setGreenchannel(color.getGreen());
+            objective.setBluechannel(color.getBlue());
+            objective.setDescription(description);
+            
+            //Generate additional attributes
+            objective.setGoalid(selectedGoal);
+            objective.setOngoing(true);
+            objective.setAccomplished(false);
+            
+            //Begin transaction
+            getManager().getTransaction().begin();
+
+            //Persist goal
+            getManager().persist(objective);
+
+            //End transaction
+            getManager().getTransaction().commit();
+            
+            return objective;
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

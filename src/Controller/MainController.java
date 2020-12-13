@@ -5,9 +5,13 @@
  */
 package Controller;
 
+import Model.GoalObjectiveDisplayable;
 import Model.Goalmodel;
+import Model.Objectivemodel;
 import Model.Usermodel;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -23,6 +27,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -49,7 +54,7 @@ public class MainController implements Initializable
     @FXML
     private ListView<String> goalDisplay;
     @FXML
-    private ListView<?> objectiveDisplay;
+    private ListView<String> objectiveDisplay;
     @FXML
     private Button logoutButton;
     @FXML
@@ -68,9 +73,10 @@ public class MainController implements Initializable
     private Usermodel activeUser;
     private List<Goalmodel> ongoingGoals;
     private List<Goalmodel> pastGoals;
-    private ObservableList<Goalmodel> ongoingGoalsObservable;
+    private ObservableList<TreeItem<GoalObjectiveDisplayable>> ongoingGoalsObservable;
     private ObservableList<String> ongoingGoalNameObservable;
-    private ObservableList<Goalmodel> pastGoalsObservable;
+    private ObservableList<TreeItem<GoalObjectiveDisplayable>> pastGoalsObservable;
+    private ObservableList<String> ongoingObjectiveNameObservable;
 
     public ImageView getLogoDisplay()
     {
@@ -122,12 +128,12 @@ public class MainController implements Initializable
         this.goalDisplay = goalDisplay;
     }
 
-    public ListView<?> getObjectiveDisplay()
+    public ListView<String> getObjectiveDisplay()
     {
         return objectiveDisplay;
     }
 
-    public void setObjectiveDisplay(ListView<?> objectiveDisplay)
+    public void setObjectiveDisplay(ListView<String> objectiveDisplay)
     {
         this.objectiveDisplay = objectiveDisplay;
     }
@@ -242,22 +248,32 @@ public class MainController implements Initializable
         this.ongoingGoalNameObservable = ongoingGoalNameObservable;
     }
 
-    public ObservableList<Goalmodel> getOngoingGoalsObservable()
+    public ObservableList<String> getOngoingObjectiveNameObservable()
+    {
+        return ongoingObjectiveNameObservable;
+    }
+
+    public void setOngoingObjectiveNameObservable(ObservableList<String> ongoingObjectiveNameObservable)
+    {
+        this.ongoingObjectiveNameObservable = ongoingObjectiveNameObservable;
+    }
+
+    public ObservableList<TreeItem<GoalObjectiveDisplayable>> getOngoingGoalsObservable()
     {
         return ongoingGoalsObservable;
     }
 
-    public void setOngoingGoalsObservable(ObservableList<Goalmodel> ongoingGoalsObservable)
+    public void setOngoingGoalsObservable(ObservableList<TreeItem<GoalObjectiveDisplayable>> ongoingGoalsObservable)
     {
         this.ongoingGoalsObservable = ongoingGoalsObservable;
     }
 
-    public ObservableList<Goalmodel> getPastGoalsObservable()
+    public ObservableList<TreeItem<GoalObjectiveDisplayable>> getPastGoalsObservable()
     {
         return pastGoalsObservable;
     }
 
-    public void setPastGoalsObservable(ObservableList<Goalmodel> pastGoalsObservable)
+    public void setPastGoalsObservable(ObservableList<TreeItem<GoalObjectiveDisplayable>> pastGoalsObservable)
     {
         this.pastGoalsObservable = pastGoalsObservable;
     }
@@ -340,13 +356,30 @@ public class MainController implements Initializable
         
         //Reset ongoing goals observable lists
         setOngoingGoalNameObservable(FXCollections.observableArrayList());
+        setOngoingObjectiveNameObservable(FXCollections.observableArrayList());
         setOngoingGoalsObservable(FXCollections.observableArrayList());
         
         //For all goals in result list, add goals to observable list
         for(Goalmodel g : getOngoingGoals())
         {
+            //Read goal names and add to sidebar observable list
             getOngoingGoalNameObservable().add(g.getName());
-            getOngoingGoalsObservable().add(g);
+            
+            //Create goal item
+            TreeItem<GoalObjectiveDisplayable> goalItem = new TreeItem(g);
+            
+            //Read the goal's objectives and set objectives as children to goal item's node
+            ObservableList<TreeItem<GoalObjectiveDisplayable>> objectivesObservable = FXCollections.observableArrayList();
+            for(Objectivemodel o : g.getObjectivemodelCollection())
+            {
+                objectivesObservable.add(new TreeItem<GoalObjectiveDisplayable>(o));
+                if((!o.getAccomplished())&&(o.getOngoing()))
+                {
+                    getOngoingObjectiveNameObservable().add(o.getName());
+                }
+            }
+            goalItem.getChildren().setAll(objectivesObservable);
+            getOngoingGoalsObservable().add(goalItem);
         }
         
         //Query for all past goals
@@ -361,14 +394,34 @@ public class MainController implements Initializable
         //For all goals in result list, add goals to observable list
         for(Goalmodel g : getPastGoals())
         {
-            getPastGoalsObservable().add(g);
+            //Create goal item
+            TreeItem<GoalObjectiveDisplayable> goalItem = new TreeItem(g);
+            
+            //Read the goal's objectives and set objectives as children to goal item's node
+            ObservableList<TreeItem<GoalObjectiveDisplayable>> objectivesObservable = FXCollections.observableArrayList();
+            for(Objectivemodel o : g.getObjectivemodelCollection())
+            {
+                objectivesObservable.add(new TreeItem<GoalObjectiveDisplayable>(o));
+            }
+            goalItem.getChildren().setAll(objectivesObservable);
+            getOngoingGoalsObservable().add(goalItem);
         }
         
         //Update display
         getGoalDisplay().setItems(getOngoingGoalNameObservable());
-        getGoalViewController().getOngoingGoalTable().setItems(getOngoingGoalsObservable());
-        getGoalViewController().getPastGoalTable().setItems(getPastGoalsObservable());
+        getObjectiveDisplay().setItems(getOngoingObjectiveNameObservable());
+        Goalmodel ongoingRoot = new Goalmodel();
+        ongoingRoot.setName("Ongoing Goals");
+        getGoalViewController().getOngoingGoalTable().setRoot(new TreeItem<>(ongoingRoot));
+        getGoalViewController().getOngoingGoalTable().getRoot().setExpanded(true);
+        getGoalViewController().getOngoingGoalTable().getRoot().getChildren().setAll(getOngoingGoalsObservable());
+        Goalmodel pastRoot = new Goalmodel();
+        pastRoot.setName("Past Goals");
+        getGoalViewController().getPastGoalTable().setRoot(new TreeItem<>(pastRoot));
+        getGoalViewController().getPastGoalTable().getRoot().setExpanded(true);
+        getGoalViewController().getPastGoalTable().getRoot().getChildren().setAll(getPastGoalsObservable());
         getGoalDisplay().refresh();
+        getObjectiveDisplay().refresh();
         getGoalViewController().getOngoingGoalTable().refresh();
         getGoalViewController().getPastGoalTable().refresh();
     }

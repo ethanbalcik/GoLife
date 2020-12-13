@@ -6,7 +6,6 @@
 package Model;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -17,12 +16,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -33,25 +30,19 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries(
 {
-    @NamedQuery(name = "Objectivemodel.findAll", query = "SELECT o FROM Objectivemodel o")
+    @NamedQuery(name = "Objectivemodel.findAll", query = "SELECT o FROM Objectivemodel o ORDER BY o.objectiveid DESC")
     , @NamedQuery(name = "Objectivemodel.findByObjectiveid", query = "SELECT o FROM Objectivemodel o WHERE o.objectiveid = :objectiveid")
     , @NamedQuery(name = "Objectivemodel.findByName", query = "SELECT o FROM Objectivemodel o WHERE o.name = :name")
     , @NamedQuery(name = "Objectivemodel.findByDescription", query = "SELECT o FROM Objectivemodel o WHERE o.description = :description")
     , @NamedQuery(name = "Objectivemodel.findByDeadline", query = "SELECT o FROM Objectivemodel o WHERE o.deadline = :deadline")
-    , @NamedQuery(name = "Objectivemodel.findByColor", query = "SELECT o FROM Objectivemodel o WHERE o.color = :color")
     , @NamedQuery(name = "Objectivemodel.findByOngoing", query = "SELECT o FROM Objectivemodel o WHERE o.ongoing = :ongoing")
     , @NamedQuery(name = "Objectivemodel.findByAccomplished", query = "SELECT o FROM Objectivemodel o WHERE o.accomplished = :accomplished")
+    , @NamedQuery(name = "Objectivemodel.findByRedchannel", query = "SELECT o FROM Objectivemodel o WHERE o.redchannel = :redchannel")
+    , @NamedQuery(name = "Objectivemodel.findByGreenchannel", query = "SELECT o FROM Objectivemodel o WHERE o.greenchannel = :greenchannel")
+    , @NamedQuery(name = "Objectivemodel.findByBluechannel", query = "SELECT o FROM Objectivemodel o WHERE o.bluechannel = :bluechannel")
 })
-public class Objectivemodel implements Serializable
+public class Objectivemodel implements Serializable, GoalObjectiveDisplayable
 {
-
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "REDCHANNEL")
-    private Double redchannel;
-    @Column(name = "GREENCHANNEL")
-    private Double greenchannel;
-    @Column(name = "BLUECHANNEL")
-    private Double bluechannel;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -66,17 +57,20 @@ public class Objectivemodel implements Serializable
     @Column(name = "DEADLINE")
     @Temporal(TemporalType.DATE)
     private Date deadline;
-    @Column(name = "COLOR")
-    private BigInteger color;
     @Column(name = "ONGOING")
     private Boolean ongoing;
     @Column(name = "ACCOMPLISHED")
     private Boolean accomplished;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "REDCHANNEL")
+    private Double redchannel;
+    @Column(name = "GREENCHANNEL")
+    private Double greenchannel;
+    @Column(name = "BLUECHANNEL")
+    private Double bluechannel;
     @JoinColumn(name = "GOALID", referencedColumnName = "GOALID")
     @ManyToOne
     private Goalmodel goalid;
-    @OneToMany(mappedBy = "objectiveid")
-    private Collection<Eventmodel> eventmodelCollection;
 
     public Objectivemodel()
     {
@@ -133,16 +127,6 @@ public class Objectivemodel implements Serializable
         this.deadline = deadline;
     }
 
-    public BigInteger getColor()
-    {
-        return color;
-    }
-
-    public void setColor(BigInteger color)
-    {
-        this.color = color;
-    }
-
     public Boolean getOngoing()
     {
         return ongoing;
@@ -163,6 +147,36 @@ public class Objectivemodel implements Serializable
         this.accomplished = accomplished;
     }
 
+    public Double getRedchannel()
+    {
+        return redchannel;
+    }
+
+    public void setRedchannel(Double redchannel)
+    {
+        this.redchannel = redchannel;
+    }
+
+    public Double getGreenchannel()
+    {
+        return greenchannel;
+    }
+
+    public void setGreenchannel(Double greenchannel)
+    {
+        this.greenchannel = greenchannel;
+    }
+
+    public Double getBluechannel()
+    {
+        return bluechannel;
+    }
+
+    public void setBluechannel(Double bluechannel)
+    {
+        this.bluechannel = bluechannel;
+    }
+
     public Goalmodel getGoalid()
     {
         return goalid;
@@ -171,17 +185,6 @@ public class Objectivemodel implements Serializable
     public void setGoalid(Goalmodel goalid)
     {
         this.goalid = goalid;
-    }
-
-    @XmlTransient
-    public Collection<Eventmodel> getEventmodelCollection()
-    {
-        return eventmodelCollection;
-    }
-
-    public void setEventmodelCollection(Collection<Eventmodel> eventmodelCollection)
-    {
-        this.eventmodelCollection = eventmodelCollection;
     }
 
     @Override
@@ -214,34 +217,16 @@ public class Objectivemodel implements Serializable
         return "Model.Objectivemodel[ objectiveid=" + objectiveid + " ]";
     }
 
-    public Double getRedchannel()
+    @Override
+    public int getId()
     {
-        return redchannel;
+        return this.objectiveid;
     }
 
-    public void setRedchannel(Double redchannel)
+    @Override
+    public Collection<Objectivemodel> getObjectivemodelCollection()
     {
-        this.redchannel = redchannel;
-    }
-
-    public Double getGreenchannel()
-    {
-        return greenchannel;
-    }
-
-    public void setGreenchannel(Double greenchannel)
-    {
-        this.greenchannel = greenchannel;
-    }
-
-    public Double getBluechannel()
-    {
-        return bluechannel;
-    }
-
-    public void setBluechannel(Double bluechannel)
-    {
-        this.bluechannel = bluechannel;
+        return null;
     }
     
 }
