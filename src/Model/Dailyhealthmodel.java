@@ -102,7 +102,6 @@ public class Dailyhealthmodel implements Serializable
         this.fat = fat;
     }
 
-
     public String getJournalentry()
     {
         return journalentry;
