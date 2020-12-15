@@ -11,6 +11,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -33,26 +35,17 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Eventmodel.findAll", query = "SELECT e FROM Eventmodel e")
     , @NamedQuery(name = "Eventmodel.findByEventid", query = "SELECT e FROM Eventmodel e WHERE e.eventid = :eventid")
     , @NamedQuery(name = "Eventmodel.findByStartdate", query = "SELECT e FROM Eventmodel e WHERE e.startdate = :startdate")
-    , @NamedQuery(name = "Eventmodel.findByStarttime", query = "SELECT e FROM Eventmodel e WHERE e.starttime = :starttime")
     , @NamedQuery(name = "Eventmodel.findByDuration", query = "SELECT e FROM Eventmodel e WHERE e.duration = :duration")
     , @NamedQuery(name = "Eventmodel.findByName", query = "SELECT e FROM Eventmodel e WHERE e.name = :name")
     , @NamedQuery(name = "Eventmodel.findByDescription", query = "SELECT e FROM Eventmodel e WHERE e.description = :description")
-    , @NamedQuery(name = "Eventmodel.findByColor", query = "SELECT e FROM Eventmodel e WHERE e.color = :color")
+    , @NamedQuery(name = "Eventmodel.findEventsInRange", query = "Select e FROM Eventmodel e WHERE e.startdate >= :lower AND e.startdate <= :upper")
 })
 public class Eventmodel implements Serializable
 {
-
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "REDCHANNEL")
-    private Double redchannel;
-    @Column(name = "GREENCHANNEL")
-    private Boolean greenchannel;
-    @Column(name = "BLUECHANNEL")
-    private Double bluechannel;
-
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "EVENTID")
     private Integer eventid;
     @Basic(optional = false)
@@ -60,18 +53,12 @@ public class Eventmodel implements Serializable
     @Temporal(TemporalType.DATE)
     private Date startdate;
     @Basic(optional = false)
-    @Column(name = "STARTTIME")
-    @Temporal(TemporalType.TIME)
-    private Date starttime;
-    @Basic(optional = false)
     @Column(name = "DURATION")
     private int duration;
     @Column(name = "NAME")
     private String name;
     @Column(name = "DESCRIPTION")
     private String description;
-    @Column(name = "COLOR")
-    private BigInteger color;
     @JoinColumn(name = "CALENDARID", referencedColumnName = "CALENDARID")
     @ManyToOne
     private Calendarmodel calendarid;
@@ -91,11 +78,10 @@ public class Eventmodel implements Serializable
         this.eventid = eventid;
     }
 
-    public Eventmodel(Integer eventid, Date startdate, Date starttime, int duration)
+    public Eventmodel(Integer eventid, Date startdate, int duration)
     {
         this.eventid = eventid;
         this.startdate = startdate;
-        this.starttime = starttime;
         this.duration = duration;
     }
 
@@ -117,16 +103,6 @@ public class Eventmodel implements Serializable
     public void setStartdate(Date startdate)
     {
         this.startdate = startdate;
-    }
-
-    public Date getStarttime()
-    {
-        return starttime;
-    }
-
-    public void setStarttime(Date starttime)
-    {
-        this.starttime = starttime;
     }
 
     public int getDuration()
@@ -157,16 +133,6 @@ public class Eventmodel implements Serializable
     public void setDescription(String description)
     {
         this.description = description;
-    }
-
-    public BigInteger getColor()
-    {
-        return color;
-    }
-
-    public void setColor(BigInteger color)
-    {
-        this.color = color;
     }
 
     public Calendarmodel getCalendarid()
@@ -228,35 +194,4 @@ public class Eventmodel implements Serializable
     {
         return "Model.Eventmodel[ eventid=" + eventid + " ]";
     }
-
-    public Double getRedchannel()
-    {
-        return redchannel;
-    }
-
-    public void setRedchannel(Double redchannel)
-    {
-        this.redchannel = redchannel;
-    }
-
-    public Boolean getGreenchannel()
-    {
-        return greenchannel;
-    }
-
-    public void setGreenchannel(Boolean greenchannel)
-    {
-        this.greenchannel = greenchannel;
-    }
-
-    public Double getBluechannel()
-    {
-        return bluechannel;
-    }
-
-    public void setBluechannel(Double bluechannel)
-    {
-        this.bluechannel = bluechannel;
-    }
-    
 }
