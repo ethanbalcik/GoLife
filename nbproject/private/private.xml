@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
-        <file>
-            <url>src/Controller/MainController.java</url>
-            <bookmark id="1">
-                <name/>
-                <line>170</line>
-                <key/>
-            </bookmark>
-        </file>
-    </editor-bookmarks>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/ebalc/Desktop/NetBeansProjects/GoLife/src/View/GoalView.fxml</file>
-            <file>file:/C:/Users/ebalc/Desktop/NetBeansProjects/GoLife/src/Controller/LoginController.java</file>
-            <file>file:/C:/Users/ebalc/Desktop/NetBeansProjects/GoLife/src/Controller/RegisterController.java</file>
+            <file>file:/C:/Users/ebalc/Desktop/NetBeansProjects/GoLife/src/Controller/CalendarController.java</file>
+            <file>file:/C:/Users/ebalc/Desktop/NetBeansProjects/GoLife/src/Controller/CreateEventController.java</file>
+            <file>file:/C:/Users/ebalc/Desktop/NetBeansProjects/GoLife/src/Model/Objectivemodel.java</file>
+            <file>file:/C:/Users/ebalc/Desktop/NetBeansProjects/GoLife/src/Model/Eventmodel.java</file>
+            <file>file:/C:/Users/ebalc/Desktop/NetBeansProjects/GoLife/src/Model/Goalmodel.java</file>
+            <file>file:/C:/Users/ebalc/Desktop/NetBeansProjects/GoLife/src/Controller/CreateGoalObjectiveController.java</file>
+            <file>file:/C:/Users/ebalc/Desktop/NetBeansProjects/GoLife/src/View/CreateEventView.fxml</file>
             <file>file:/C:/Users/ebalc/Desktop/NetBeansProjects/GoLife/src/Controller/GoalController.java</file>
             <file>file:/C:/Users/ebalc/Desktop/NetBeansProjects/GoLife/src/Controller/MainController.java</file>
         </group>
