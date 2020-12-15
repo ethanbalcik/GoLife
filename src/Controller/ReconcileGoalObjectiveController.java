@@ -271,7 +271,14 @@ public class ReconcileGoalObjectiveController implements Initializable
                     existingGoal.setGreenchannel(getColorField().getValue().getGreen());
                     existingGoal.setBluechannel(getColorField().getValue().getBlue());
                     existingGoal.setAccomplished(getAccomplishedCheckBox().isSelected());
-                    existingGoal.setOngoing(getOngoingCheckBox().isSelected());
+                    if(!getAccomplishedCheckBox().isSelected())
+                    {
+                        existingGoal.setOngoing(getOngoingCheckBox().isSelected());
+                    }
+                    else
+                    {
+                        existingGoal.setOngoing(false);
+                    }
                     
                     //End transaction
                     getManager().getTransaction().commit();

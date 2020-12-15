@@ -361,7 +361,9 @@ public class RegisterController implements Initializable
             controller.getGoalViewController().setMainController(controller);
             controller.getGoalViewController().bindOngoingGoalTableWithButtons();
             controller.getCalendarViewController().setActiveUser(user);
+            controller.getCalendarViewController().generateMonth(false, false);
             controller.getDailyHealthViewController().setActiveUser(user);
+            controller.getDailyHealthViewController().updateView();
             
             //Instantiate new stage, give it the scene we instantiated, set visible
             Stage stage = (Stage) currentScene.getWindow();

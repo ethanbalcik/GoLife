@@ -10,6 +10,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -36,21 +38,23 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Dailyhealthmodel.findByProtein", query = "SELECT d FROM Dailyhealthmodel d WHERE d.protein = :protein")
     , @NamedQuery(name = "Dailyhealthmodel.findByMood", query = "SELECT d FROM Dailyhealthmodel d WHERE d.mood = :mood")
     , @NamedQuery(name = "Dailyhealthmodel.findByJournalentry", query = "SELECT d FROM Dailyhealthmodel d WHERE d.journalentry = :journalentry")
+    , @NamedQuery(name = "Dailyhealthmodel.findByCalendarid", query = "SELECT d FROM Dailyhealthmodel d WHERE d.calendarid = :calendarid")
 })
 public class Dailyhealthmodel implements Serializable
 {
 
+    @Column(name = "DATESUBMITTED")
+    @Temporal(TemporalType.DATE)
+    private Date datesubmitted;
     @Column(name = "PROTEIN")
     private Integer protein;
     @Column(name = "MOOD")
     private String mood;
-    @Column(name = "DATE")
-    @Temporal(TemporalType.DATE)
-    private Date date;
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "DAILYHEALTHID")
     private Integer dailyhealthid;
     @Column(name = "CARBOHYDRATES")
@@ -172,14 +176,14 @@ public class Dailyhealthmodel implements Serializable
         this.mood = mood;
     }
 
-    public Date getDate()
+    public Date getDatesubmitted()
     {
-        return date;
+        return datesubmitted;
     }
 
-    public void setDate(Date date)
+    public void setDatesubmitted(Date datesubmitted)
     {
-        this.date = date;
+        this.datesubmitted = datesubmitted;
     }
     
 }

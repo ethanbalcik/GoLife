@@ -189,7 +189,9 @@ public class LoginController implements Initializable
             controller.getGoalViewController().setMainController(controller);
             controller.getGoalViewController().bindOngoingGoalTableWithButtons();
             controller.getCalendarViewController().setActiveUser(user);
+            controller.getCalendarViewController().generateMonth(false, false);
             controller.getDailyHealthViewController().setActiveUser(user);
+            controller.getDailyHealthViewController().updateView();
             
             //Update views
             controller.updateGoalViews();
