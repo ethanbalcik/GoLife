@@ -234,10 +234,12 @@ public class CreateGoalObjectiveController implements Initializable
             int resultSize = query.getResultList().size();
             if(resultSize == 1)
             {
+                //Transaction was successful
                 transactionComplete = true;
             }
             else
             {
+                //Notify user
                 getFeedbackLabel().setText("Goal was not saved");
             }
         }
@@ -252,10 +254,12 @@ public class CreateGoalObjectiveController implements Initializable
             int resultSize = query.getResultList().size();
             if(resultSize == 1)
             {
+                //Transaction was successful
                 transactionComplete = true;
             }
             else
             {
+                //Notify user
                 getFeedbackLabel().setText("Goal was not saved");
             }
         }
@@ -279,17 +283,8 @@ public class CreateGoalObjectiveController implements Initializable
             query.setParameter("calendarid", getActiveUser().getCalendarid().getCalendarid());
             Calendarmodel calendar = (Calendarmodel)query.getSingleResult();
             
-            //Query for most recent goal id, check for values, and get incremented value
-            Query query2 = getManager().createNamedQuery("Goalmodel.findAll");
-            int goalId = 1;
-            if(query2.getResultList().size() != 0)
-            {
-                goalId = ((Goalmodel)query2.getResultList().get(0)).getGoalid() + 1;
-            }
-            
             //Instantiate goal and set attributes using input params
             Goalmodel goal = new Goalmodel();
-            goal.setGoalid(goalId);
             goal.setName(name);
             goal.setDeadline(deadline);
             goal.setRedchannel(color.getRed());
@@ -330,17 +325,8 @@ public class CreateGoalObjectiveController implements Initializable
             query.setParameter("goalid", getSelectedId());
             Goalmodel selectedGoal = (Goalmodel)query.getSingleResult();
             
-            //Query for most recent objective id, check for values, and get incremented value
-            Query query2 = getManager().createNamedQuery("Objectivemodel.findAll");
-            int objectiveId = 1;
-            if(query2.getResultList().size() != 0)
-            {
-                objectiveId = ((Objectivemodel)query2.getResultList().get(0)).getObjectiveid() + 1;
-            }
-            
             //Instantiate goal and set attributes using input params
             Objectivemodel objective = new Objectivemodel();
-            objective.setObjectiveid(objectiveId);
             objective.setName(name);
             objective.setDeadline(deadline);
             objective.setRedchannel(color.getRed());

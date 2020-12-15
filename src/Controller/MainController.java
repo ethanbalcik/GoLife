@@ -35,6 +35,9 @@ import javafx.util.Callback;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import org.eclipse.persistence.config.CacheUsage;
+import org.eclipse.persistence.config.HintValues;
+import org.eclipse.persistence.config.QueryHints;
 
 /**
  * FXML Controller class
@@ -352,6 +355,7 @@ public class MainController implements Initializable
         Query query = getManager().createNamedQuery("Goalmodel.findByCalendarIdAndOngoing");
         query.setParameter("ongoing", true);
         query.setParameter("calendarid", getActiveUser().getCalendarid());
+        query.setHint(QueryHints.REFRESH, HintValues.TRUE);
         setOngoingGoals(query.getResultList());
         
         //Reset ongoing goals observable lists
@@ -384,9 +388,10 @@ public class MainController implements Initializable
         
         //Query for all past goals
         Query query2 = getManager().createNamedQuery("Goalmodel.findByCalendarIdAndOngoing");
-        query.setParameter("ongoing", false);
-        query.setParameter("calendarid", getActiveUser().getCalendarid());
-        setPastGoals(query.getResultList());
+        query2.setParameter("ongoing", false);
+        query2.setParameter("calendarid", getActiveUser().getCalendarid());
+        query2.setHint(QueryHints.REFRESH, HintValues.TRUE);
+        setPastGoals(query2.getResultList());
         
         //Reset past goals observable
         setPastGoalsObservable(FXCollections.observableArrayList());
@@ -404,7 +409,7 @@ public class MainController implements Initializable
                 objectivesObservable.add(new TreeItem<GoalObjectiveDisplayable>(o));
             }
             goalItem.getChildren().setAll(objectivesObservable);
-            getOngoingGoalsObservable().add(goalItem);
+            getPastGoalsObservable().add(goalItem);
         }
         
         //Update display

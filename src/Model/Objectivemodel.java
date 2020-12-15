@@ -11,15 +11,19 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -44,9 +48,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Objectivemodel implements Serializable, GoalObjectiveDisplayable
 {
 
+    @OneToMany(mappedBy = "objectiveid")
+    private Collection<Eventmodel> eventmodelCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "OBJECTIVEID")
     private Integer objectiveid;
     @Column(name = "NAME")
@@ -214,7 +221,7 @@ public class Objectivemodel implements Serializable, GoalObjectiveDisplayable
     @Override
     public String toString()
     {
-        return "Model.Objectivemodel[ objectiveid=" + objectiveid + " ]";
+        return "Model.Objectivemodel[ objectiveid=" + objectiveid + ", goalid=" + goalid + ", name=" + name + ", description=" + description + ", deadline=" + deadline.toString() + ", accomplished=" + accomplished + ", ongoing=" + ongoing + " ]";
     }
 
     @Override
@@ -228,5 +235,15 @@ public class Objectivemodel implements Serializable, GoalObjectiveDisplayable
     {
         return null;
     }
-    
+
+    @XmlTransient
+    public Collection<Eventmodel> getEventmodelCollection()
+    {
+        return eventmodelCollection;
+    }
+
+    public void setEventmodelCollection(Collection<Eventmodel> eventmodelCollection)
+    {
+        this.eventmodelCollection = eventmodelCollection;
+    }
 }

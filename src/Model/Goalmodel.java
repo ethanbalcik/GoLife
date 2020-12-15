@@ -9,8 +9,11 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -56,6 +59,7 @@ public class Goalmodel implements Serializable, GoalObjectiveDisplayable
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "GOALID")
     private Integer goalid;
     @Column(name = "NAME")
@@ -71,9 +75,9 @@ public class Goalmodel implements Serializable, GoalObjectiveDisplayable
     private Boolean ongoing;
     @Column(name = "ACCOMPLISHED")
     private Boolean accomplished;
-    @OneToMany(mappedBy = "goalid")
+    @OneToMany(mappedBy = "goalid", cascade = CascadeType.ALL)
     private Collection<Objectivemodel> objectivemodelCollection;
-    @OneToMany(mappedBy = "goalid")
+    @OneToMany(mappedBy = "goalid", cascade = CascadeType.ALL)
     private Collection<Eventmodel> eventmodelCollection;
     @JoinColumn(name = "CALENDARID", referencedColumnName = "CALENDARID")
     @ManyToOne
@@ -213,7 +217,7 @@ public class Goalmodel implements Serializable, GoalObjectiveDisplayable
     @Override
     public String toString()
     {
-        return "Model.Goalmodel[ goalid=" + goalid + " ]";
+        return "Model.Goalmodel[ goalid=" + goalid + ", name=" + name + ", description=" + description + ", deadline=" + deadline.toString() + ", accomplished=" + accomplished + ", ongoing=" + ongoing + " ]";
     }
 
     public Double getRedchannel()

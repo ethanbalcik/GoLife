@@ -6,6 +6,7 @@
 package Model;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -37,6 +40,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Dailyhealthmodel implements Serializable
 {
 
+    @Column(name = "PROTEIN")
+    private Integer protein;
+    @Column(name = "MOOD")
+    private String mood;
+    @Column(name = "DATE")
+    @Temporal(TemporalType.DATE)
+    private Date date;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -46,10 +57,6 @@ public class Dailyhealthmodel implements Serializable
     private Integer carbohydrates;
     @Column(name = "FAT")
     private Integer fat;
-    @Column(name = "PROTEIN")
-    private Boolean protein;
-    @Column(name = "MOOD")
-    private Integer mood;
     @Column(name = "JOURNALENTRY")
     private String journalentry;
     @JoinColumn(name = "CALENDARID", referencedColumnName = "CALENDARID")
@@ -95,25 +102,6 @@ public class Dailyhealthmodel implements Serializable
         this.fat = fat;
     }
 
-    public Boolean getProtein()
-    {
-        return protein;
-    }
-
-    public void setProtein(Boolean protein)
-    {
-        this.protein = protein;
-    }
-
-    public Integer getMood()
-    {
-        return mood;
-    }
-
-    public void setMood(Integer mood)
-    {
-        this.mood = mood;
-    }
 
     public String getJournalentry()
     {
@@ -163,6 +151,36 @@ public class Dailyhealthmodel implements Serializable
     public String toString()
     {
         return "Model.Dailyhealthmodel[ dailyhealthid=" + dailyhealthid + " ]";
+    }
+
+    public Integer getProtein()
+    {
+        return protein;
+    }
+
+    public void setProtein(Integer protein)
+    {
+        this.protein = protein;
+    }
+
+    public String getMood()
+    {
+        return mood;
+    }
+
+    public void setMood(String mood)
+    {
+        this.mood = mood;
+    }
+
+    public Date getDate()
+    {
+        return date;
+    }
+
+    public void setDate(Date date)
+    {
+        this.date = date;
     }
     
 }

@@ -10,6 +10,8 @@ import Model.Goalmodel;
 import Model.Usermodel;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
@@ -28,6 +30,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -244,11 +247,11 @@ public class GoalController implements Initializable
             //Set flag value
             boolean continueFlag = true;
             
-            //Check for parent
-            Goalmodel g;
+            //Grab selected item and check for parent and parent-of-parent
+            TreeItem<GoalObjectiveDisplayable> g = (TreeItem<GoalObjectiveDisplayable>)getOngoingGoalTable().getSelectionModel().getSelectedItem();
             try
             {
-                g = ((Goalmodel)((TreeItem<GoalObjectiveDisplayable>)getOngoingGoalTable().getSelectionModel().getSelectedItem()).getParent().getValue());
+                GoalObjectiveDisplayable parentValue = g.getParent().getValue();
             }
             catch(NullPointerException npe)
             {
@@ -257,17 +260,16 @@ public class GoalController implements Initializable
             }
             
             //Check for parent of parent
-            if(continueFlag = true)
+            if(continueFlag == true)
             {
-                Goalmodel g2;
                 try
                 {
-                    g2 = ((Goalmodel)((TreeItem<GoalObjectiveDisplayable>)getOngoingGoalTable().getSelectionModel().getSelectedItem()).getParent().getParent().getValue());
+                    GoalObjectiveDisplayable parentOfParentValue = g.getParent().getParent().getValue();
                 }
                 catch(NullPointerException npe)
                 {
                     //Set selected id equal to the selected goal id
-                    controller.setSelectedId(((TreeItem<GoalObjectiveDisplayable>)getOngoingGoalTable().getSelectionModel().getSelectedItem()).getValue().getId());
+                    controller.setSelectedId(g.getValue().getId());
 
                     //Instantiate new stage, give it the scene we instantiated, set visible
                     Stage stage = new Stage();
@@ -278,10 +280,10 @@ public class GoalController implements Initializable
                 }
             }
             
-            if(continueFlag = true)
+            if(continueFlag == true)
             {
                 //If parent of parent exists, it is an objective, so get its parent's goal
-                controller.setSelectedId(((TreeItem<GoalObjectiveDisplayable>)getOngoingGoalTable().getSelectionModel().getSelectedItem()).getParent().getValue().getId());
+                controller.setSelectedId(g.getParent().getValue().getId());
 
                 //Instantiate new stage, give it the scene we instantiated, set visible
                 Stage stage = new Stage();
@@ -308,7 +310,90 @@ public class GoalController implements Initializable
     @FXML
     private void reconcileGoalObjective(ActionEvent event)
     {
-        
+        try
+        {
+            //Load create goal & objective view
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/ReconcileGoalObjectiveView.fxml"));
+            Parent createGoalObjectiveView = loader.load();
+            
+            //Instantiate scene, give it the parent we instantiated
+            Scene scene = new Scene(createGoalObjectiveView);
+            
+            //Get controller, set active user, set objective
+            ReconcileGoalObjectiveController controller = loader.getController();
+            controller.setMainController(getMainController());
+            controller.setActiveUser(getActiveUser());
+            
+            //Set flag value
+            boolean continueFlag = true;
+            
+            //Grab selected item and check for parent
+            TreeItem<GoalObjectiveDisplayable> g = (TreeItem<GoalObjectiveDisplayable>)getOngoingGoalTable().getSelectionModel().getSelectedItem();
+            try
+            {
+                GoalObjectiveDisplayable parent = g.getParent().getValue();
+            }
+            catch(NullPointerException npe)
+            {
+                npe.printStackTrace();
+                continueFlag = false;
+            }
+            
+            //Check for parent of parent
+            if(continueFlag == true)
+            {
+                //Grab selected item
+                GoalObjectiveDisplayable selectedGoalObjective = g.getValue();
+                
+                //Set selected id equal to the selected goal id
+                controller.setSelectedId(selectedGoalObjective.getId());
+                
+                //Load fields - since we know it's not the root item we can load its fields regardless of whether its a goal or abjective
+                controller.getGoalObjectiveNameField().setText(selectedGoalObjective.getName());
+                controller.getDescriptionField().setText(selectedGoalObjective.getDescription());
+                controller.getDeadlineField().setValue(selectedGoalObjective.getDeadline().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                controller.getColorField().setValue(Color.color(selectedGoalObjective.getRedchannel().floatValue(), selectedGoalObjective.getGreenchannel().floatValue(), selectedGoalObjective.getBluechannel().floatValue()));
+                controller.getAccomplishedCheckBox().setSelected(selectedGoalObjective.getAccomplished());
+                controller.getOngoingCheckBox().setSelected(selectedGoalObjective.getOngoing());
+                
+                //Test for parent-of-parent
+                try
+                {
+                    GoalObjectiveDisplayable parentOfParent = g.getParent().getParent().getValue();
+                }
+                catch(NullPointerException npe)
+                {
+                    //If parent of parent is null, it is a goal, so isGoal = true
+                    controller.setIsGoal(true);
+                    
+                    //Instantiate new stage, give it the scene we instantiated, set visible
+                    Stage stage = new Stage();
+                    stage.setScene(scene);
+                    stage.show();
+                    
+                    continueFlag = false;
+                }
+            }
+            
+            if(continueFlag == true)
+            {
+                //If parent of parent exists, it is an objective, so isGoal = false
+                controller.setIsGoal(false);
+                
+                //Instantiate new stage, give it the scene we instantiated, set visible
+                Stage stage = new Stage();
+                stage.setScene(scene);
+                stage.show();
+            }
+        }
+        catch(LoadException e)
+        {
+            e.printStackTrace();
+        }
+        catch(IOException ioe)
+        {
+            ioe.printStackTrace();
+        }
     }
     
     public void bindOngoingGoalTableWithButtons()

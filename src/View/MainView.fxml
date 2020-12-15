@@ -67,7 +67,7 @@
                   </Button>
                </children>
             </VBox>
-            <StackPane prefHeight="150.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+            <StackPane prefHeight="150.0" prefWidth="200.0" maxHeight="1280.0" maxWidth="2160.0" HBox.hgrow="ALWAYS">
                 <children>
                     <fx:include fx:id="calendarView" source="/View/CalendarView.fxml"/>
                     <fx:include fx:id="goalView" source="/View/GoalView.fxml" visible="false"/>

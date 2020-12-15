@@ -32,6 +32,11 @@ public interface GoalObjectiveDisplayable
     //Accomplished property
     public Boolean getAccomplished();
     
+    //Color channels
+    public Double getRedchannel();
+    public Double getGreenchannel();
+    public Double getBluechannel();
+    
     //Objectives property
     public Collection<Objectivemodel> getObjectivemodelCollection();
 }
