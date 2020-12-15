@@ -47,9 +47,9 @@ public class Dailyhealthmodel implements Serializable
     @Column(name = "FAT")
     private Integer fat;
     @Column(name = "PROTEIN")
-    private Boolean protein;
+    private Integer protein;
     @Column(name = "MOOD")
-    private Integer mood;
+    private String mood;
     @Column(name = "JOURNALENTRY")
     private String journalentry;
     @JoinColumn(name = "CALENDARID", referencedColumnName = "CALENDARID")
@@ -95,22 +95,22 @@ public class Dailyhealthmodel implements Serializable
         this.fat = fat;
     }
 
-    public Boolean getProtein()
+    public Integer getProtein()
     {
         return protein;
     }
 
-    public void setProtein(Boolean protein)
+    public void setProtein(Integer protein)
     {
         this.protein = protein;
     }
 
-    public Integer getMood()
+    public String getMood()
     {
         return mood;
     }
 
-    public void setMood(Integer mood)
+    public void setMood(String mood)
     {
         this.mood = mood;
     }
