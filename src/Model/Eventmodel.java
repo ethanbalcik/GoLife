@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Eventmodel.findByDuration", query = "SELECT e FROM Eventmodel e WHERE e.duration = :duration")
     , @NamedQuery(name = "Eventmodel.findByName", query = "SELECT e FROM Eventmodel e WHERE e.name = :name")
     , @NamedQuery(name = "Eventmodel.findByDescription", query = "SELECT e FROM Eventmodel e WHERE e.description = :description")
-    , @NamedQuery(name = "Eventmodel.findEventsInRange", query = "Select e FROM Eventmodel e WHERE e.startdate >= :lower AND e.startdate <= :upper")
+    , @NamedQuery(name = "Eventmodel.findEventsInRangeByCalendarId", query = "Select e FROM Eventmodel e WHERE e.calendarid = :calendarid AND e.startdate >= :lower AND e.startdate <= :upper")
 })
 public class Eventmodel implements Serializable
 {

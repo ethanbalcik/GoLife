@@ -147,9 +147,6 @@ public class CalendarController implements Initializable
         
         //Set current date
         setCalendar(new GregorianCalendar());
-        
-        //Display current month
-        generateMonth(false, false);
     }
     
     @FXML
@@ -316,11 +313,12 @@ public class CalendarController implements Initializable
         }
         
         //Query for events in month
-        Query q = getManager().createNamedQuery("Eventmodel.findEventsInRange");
+        Query q = getManager().createNamedQuery("Eventmodel.findEventsInRangeByCalendarId");
         GregorianCalendar lower = new GregorianCalendar(thisMonthCalendar.get(Calendar.YEAR), thisMonthCalendar.get(Calendar.MONTH), thisMonthCalendar.getActualMinimum(Calendar.DAY_OF_MONTH));
         GregorianCalendar upper = new GregorianCalendar(thisMonthCalendar.get(Calendar.YEAR), thisMonthCalendar.get(Calendar.MONTH), thisMonthCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         q.setParameter("lower", lower.getTime());
         q.setParameter("upper", upper.getTime());
+        q.setParameter("calendarid", getActiveUser().getCalendarid());
         q.setHint(QueryHints.REFRESH, HintValues.TRUE);
         List<Eventmodel> events = q.getResultList();
         
